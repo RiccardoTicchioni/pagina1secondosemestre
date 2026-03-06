@@ -1397,6 +1397,25 @@
       </div>
     </div>
   </footer>
+    <audio id="bgMusic" loop>
+  <source src="audio/background.mp3" type="audio/mpeg" />
+</audio>
+
+<button id="musicToggle" style="
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  background: rgba(12,18,36,0.75);
+  color: white;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+">
+  Attiva musica
+</button>
 
   <script>
     const searchInput = document.getElementById('searchInput');
@@ -1406,6 +1425,36 @@
     const emptyState = document.getElementById('emptyState');
     const visualShell = document.getElementById('visualShell');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+
+  bgMusic.volume = 0.25;
+
+  async function tryPlayMusic() {
+    try {
+      await bgMusic.play();
+      musicToggle.textContent = 'Pausa musica';
+    } catch (err) {
+      musicToggle.textContent = 'Attiva musica';
+    }
+  }
+
+  tryPlayMusic();
+
+  musicToggle.addEventListener('click', async () => {
+    if (bgMusic.paused) {
+      try {
+        await bgMusic.play();
+        musicToggle.textContent = 'Pausa musica';
+      } catch (err) {
+        musicToggle.textContent = 'Attiva musica';
+      }
+    } else {
+      bgMusic.pause();
+      musicToggle.textContent = 'Attiva musica';
+    }
+  });
 
     function updateFilter() {
       const query = searchInput.value.trim().toLowerCase();
@@ -1475,5 +1524,6 @@
       }
     }
   </script>
+
 </body>
 </html>
